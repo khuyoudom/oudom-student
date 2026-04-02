@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
+    "check:mongodb": "node scripts/check-mongodb.js",
     "test": "echo \"No automated tests configured yet\""
   },
   "keywords": [],

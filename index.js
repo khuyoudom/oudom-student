@@ -43,6 +43,24 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/health/mongodb", async (_req, res) => {
+  try {
+    await connectMongoDB();
+    const db = getDb();
+    await db.command({ ping: 1 });
+
+    return res.status(200).json({
+      ok: true,
+      database: process.env.MONGODB_DB_NAME || "dynamics_node"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      message: error.message
+    });
+  }
+});
+
 // Serverless MongoDB connection middleware
 app.use(async (req, res, next) => {
   try {

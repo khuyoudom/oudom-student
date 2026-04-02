@@ -1,7 +1,8 @@
 const { MongoClient, ObjectId } = require("mongodb");
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/?directConnection=true";
 const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME || "dynamics_node";
+const MONGODB_SERVER_SELECTION_TIMEOUT_MS = Number(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS || 5000);
 
 let client;
 let db;
@@ -11,7 +12,9 @@ async function connectMongoDB() {
     return db;
   }
 
-  client = new MongoClient(MONGODB_URI);
+  client = new MongoClient(MONGODB_URI, {
+    serverSelectionTimeoutMS: MONGODB_SERVER_SELECTION_TIMEOUT_MS
+  });
   await client.connect();
   db = client.db(MONGODB_DB_NAME);
 
