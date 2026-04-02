@@ -15,6 +15,10 @@ function errorsToResponse(req, res) {
   return res.status(400).json({ errors: errors.array() });
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function normalizeId(doc) {
   if (!doc) return null;
   return {
@@ -96,7 +100,8 @@ router.get("/products", async (req, res) => {
 
   const filter = {};
   if (q) {
-    filter.$or = [{ title: { $regex: q, $options: "i" } }, { description: { $regex: q, $options: "i" } }];
+    const safeQuery = escapeRegex(q);
+    filter.$or = [{ title: { $regex: safeQuery, $options: "i" } }, { description: { $regex: safeQuery, $options: "i" } }];
   }
 
   const categoryObjectId = toObjectId(categoryId);

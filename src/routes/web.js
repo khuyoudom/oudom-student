@@ -10,6 +10,10 @@ function getValidationErrors(req) {
   return errors.isEmpty() ? [] : errors.array().map((item) => item.msg);
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function normalizeId(doc) {
   if (!doc) return null;
   return {
@@ -78,7 +82,8 @@ module.exports = function webRoutes(router) {
 
     const filter = {};
     if (q) {
-      filter.$or = [{ title: { $regex: q, $options: "i" } }, { description: { $regex: q, $options: "i" } }];
+      const safeQuery = escapeRegex(q);
+      filter.$or = [{ title: { $regex: safeQuery, $options: "i" } }, { description: { $regex: safeQuery, $options: "i" } }];
     }
 
     const categoryObjectId = toObjectId(categoryId);

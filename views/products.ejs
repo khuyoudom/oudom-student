@@ -39,7 +39,7 @@
         <div>
           <p class="tag"><%= item.category ? item.category.name : 'General' %></p>
           <h3><%= item.title %></h3>
-          <p><%= item.description.slice(0, 95) %>...</p>
+          <p><%= (item.description || "").slice(0, 95) %>...</p>
           <p class="price">
             <% if (isFree) { %>
               <span class="price-free">Free</span>

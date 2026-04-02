@@ -30,7 +30,7 @@
         <% } %>
       </div>
 
-      <p class="description"><%= product.description %></p>
+      <p class="description"><%= product.description || "" %></p>
 
       <div class="action-buttons">
         <% if (isFree && product.video) { %>
